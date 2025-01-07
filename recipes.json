@@ -1,0 +1,8 @@
+[
+  {
+    "name": "fish",
+    "ingredients": [{ "name": "tomato", "quantity": "100gm" }],
+    "cuisine": "Indian",
+    "servings": "2"
+  }
+]

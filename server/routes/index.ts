@@ -4,7 +4,6 @@ import express from "express"
 import { recipeValidator } from "../../helpers/validators"
 import { validationResult } from 'express-validator'
 
-
 const router = express.Router()
 
 router.get("/", health)

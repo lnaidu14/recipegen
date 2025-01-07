@@ -1,8 +1,24 @@
 import { Request, Response } from "express";
-
+import fs from "fs";
 
 export const createRecipe = async (req: any, res: any) => {
-    const { name, ingredients, cuisine, servings } = req.body
-    console.log(name, ingredients, cuisine, servings)
-    return res.json({ message: "Recipes endpoint hit" })
-}
+  fs.readFile("recipes.json", "utf8", function readFileCallback(err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      const recipes = JSON.parse(data); //now it an object
+      const recipe = req.body;
+
+      recipes.push(recipe);
+      fs.writeFile(
+        "recipes.json",
+        JSON.stringify(recipes),
+        "utf8",
+        function (err) {
+          if (err) throw err;
+          return res.json({ message: "Recipes added!" });
+        }
+      );
+    }
+  });
+};

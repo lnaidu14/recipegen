@@ -1,6 +1,5 @@
 import express from 'express';
-import recipeRoutes from "./routes"
-import { body, validationResult } from "express-validator"
+import recipeRoutes from "./routes";
 
 const PORT = 3000;
 const app = express();

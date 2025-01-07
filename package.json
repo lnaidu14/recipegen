@@ -4,7 +4,8 @@
   "description": "Application to suggest recipes based on ingredients inputted.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec npx ts-node server/app.ts",
+    "start": "npx ts-node server/app.ts",
+    "dev": "nodemon --exec npx ts-node server/app.ts",
     "test": "jest __tests__/unit/* --no-cache --watch-all"
   },
   "author": "Lalit Naidu",
