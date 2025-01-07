@@ -1,12 +1,12 @@
 import express from 'express';
+import api from "./routes"
 
-const PORT = 5000;
-
+const PORT = 3000;
 const app = express();
 
-app.get('/api', (req, res) => {
-    res.send('Server Running...');
-});
+app.use(express.json());
+
+app.get('/api', api);
 
 app.listen(PORT, () => {
     console.log(`Server listening at http://localhost:${PORT}/api...`);
