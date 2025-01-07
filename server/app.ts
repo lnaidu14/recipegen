@@ -1,12 +1,13 @@
 import express from 'express';
-import api from "./routes"
+import recipeRoutes from "./routes"
+import { body, validationResult } from "express-validator"
 
 const PORT = 3000;
 const app = express();
 
 app.use(express.json());
 
-app.get('/api', api);
+app.use('/api', recipeRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server listening at http://localhost:${PORT}/api...`);

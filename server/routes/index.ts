@@ -1,11 +1,21 @@
 import { health } from "./health-router"
 import { createRecipe } from "./create-recipe-router"
 import express from "express"
+import { recipeValidator } from "../../helpers/validators"
+import { validationResult } from 'express-validator'
+
 
 const router = express.Router()
 
-router.use("/api", health)
+router.get("/", health)
 
-router.use("/api/recipes", createRecipe)
+router.post("/recipes", recipeValidator, (req: any, res: any) => {
+    const errors = validationResult(req)
+    if (errors.isEmpty()) {
+        // in case request params meet the validation criteria
+        return createRecipe(req, res)
+    }
+    return res.status(422).json(errors.array().map(error => error.msg))
+})
 
 export default router
