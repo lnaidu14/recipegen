@@ -3,6 +3,9 @@ export interface Recipe {
     cuisine: string
     servings: number
     ingredients: Ingredient[]
+    verified: boolean,
+    // Make each step '.' separated
+    steps: string
 }
 
 export interface Ingredient {

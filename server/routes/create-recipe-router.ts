@@ -1,24 +1,16 @@
-import { Request, Response } from "express";
-import fs from "fs";
+import { Request, Response, NextFunction } from "express";
+import { pool } from "../../db/pg"
 
-export const createRecipe = async (req: any, res: any) => {
-    fs.readFile("recipes.json", "utf8", function readFileCallback(err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            const recipes = JSON.parse(data);
-            const recipe = req.body;
+export const createRecipe = async (req: any, res: any, next: NextFunction) => {
+    const { name, cuisine, servings, ingredients, steps, verified } = req.body
+    try {
+        const insertRecipe =
+            "INSERT INTO recipes (name, cuisine, servings, ingredients, steps, verified) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *";
+        const result = await pool.query(insertRecipe, [name, cuisine, servings, ingredients, steps, false]);
 
-            recipes.push(recipe);
-            fs.writeFile(
-                "recipes.json",
-                JSON.stringify(recipes),
-                "utf8",
-                function (err) {
-                    if (err) throw err;
-                    return res.json({ message: "Recipes added!" });
-                }
-            );
-        }
-    });
+        const createdRecipe = result.rows[0];
+        return res.json(createdRecipe);
+    } catch (err) {
+        next(err);
+    }
 };
