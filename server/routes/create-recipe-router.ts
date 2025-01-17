@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { pool } from "../../db/pg"
 
-export const createRecipe = async (req: any, res: any, next: NextFunction) => {
-    const { name, cuisine, servings, ingredients, steps, verified } = req.body
+export const createRecipe = async (req: Request, res: Response, next: NextFunction) => {
+    const { name, cuisine, servings, ingredients, steps, authour } = req.body
     try {
         const insertRecipe =
-            "INSERT INTO recipes (name, cuisine, servings, ingredients, steps, verified) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *";
-        const result = await pool.query(insertRecipe, [name, cuisine, servings, ingredients, steps, false]);
+            "INSERT INTO recipes (name, cuisine, servings, ingredients, steps, verified, authour, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *";
+        const result = await pool.query(insertRecipe, [name, cuisine, servings, ingredients, steps, false, authour, Date.now(), ""]);
 
         const createdRecipe = result.rows[0];
         return res.json(createdRecipe);
