@@ -9,7 +9,7 @@ export const createRecipe = async (req: Request, res: Response, next: NextFuncti
         const result = await pool.query(insertRecipe, [name, cuisine, servings, ingredients, steps, false, authour, Date.now(), ""]);
 
         const createdRecipe = result.rows[0];
-        return res.json(createdRecipe);
+        return res.json({ message: "Successfully created recipe!", recipe: createdRecipe });
     } catch (err) {
         next(err);
     }

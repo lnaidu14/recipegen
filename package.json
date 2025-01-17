@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npx ts-node server/app.ts",
     "dev": "nodemon --exec npx ts-node server/app.ts",
-    "test": "jest __tests__/unit/* --no-cache --watch-all"
+    "test": "jest __tests__/unit/* --no-cache --coverage",
+    "test-watch": "jest __tests__/unit/* --no-cache --watch-all"
   },
   "author": "Lalit Naidu",
   "license": "ISC",

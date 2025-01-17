@@ -1,5 +1,5 @@
 import request from "supertest"
-import router from "../../server/app"
+import { app as router } from "../../server/app"
 
 describe("Health Check", () => {
     it(`should respond with "Server is live..."`, async () => {

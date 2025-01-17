@@ -10,8 +10,4 @@ app.use(express.json());
 
 app.use('/api', recipeRoutes);
 
-app.listen(PORT, () => {
-    console.log(`Server listening at http://localhost:${PORT}/api...`);
-});
-
-export default app;
+export { app };
