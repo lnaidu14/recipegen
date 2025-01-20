@@ -1,7 +1,30 @@
 import request from "supertest"
 import { app as router } from "../../server/app"
+import { Pool } from "pg"
 
-describe("Create recipe", () => {
+// setup for to mock pg
+jest.mock('pg', () => {
+    const mPool = {
+        connect: function () {
+            return { query: jest.fn() };
+        },
+        query: jest.fn(),
+        end: jest.fn(),
+        on: jest.fn(),
+    };
+    return { Pool: jest.fn(() => mPool) };
+});
+
+describe("given recipe parameters", () => {
+    let pool: any;
+    // before each test case
+    beforeEach(() => {
+        pool = new Pool();
+    });
+    // clean up after each test case done
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
     it(`should throw an error if name of recipe is missing`, async () => {
         const response = await request(router).post("/api/recipes").send({
             "name": "",
@@ -134,18 +157,33 @@ describe("Create recipe", () => {
     })
 
     it(`should successfully create a recipe`, async () => {
-        const response = await request(router).post("/api/recipes").send({
-            "name": "Tomato Soup",
-            "ingredients": [
-                {
+        pool.query.mockResolvedValue({
+            rows: [{
+                name: 'Tomato Soup',
+                cuisine: 'Indian',
+                servings: 2,
+                ingredients: [{
                     "name": "Tomato",
                     "quantity": "100gm"
+                }],
+                steps: 'Boil tomatoes. Quick cool in ice bath. Blend tomatoes. Cook blended tomatoes and add seasoning and water.',
+                verified: false,
+                authour: 'Lalit',
+            }]
+        });
+
+        const response = await request(router).post("/api/recipes").send({
+            name: "Tomato Soup",
+            ingredients: [
+                {
+                    name: "Tomato",
+                    quantity: "100gm"
                 }
             ],
-            "cuisine": "Indian",
-            "servings": 2,
-            "steps": "Boil tomatoes. Quick cool in ice bath. Blend tomatoes. Cook blended tomatoes and add seasoning and water.",
-            "authour": "Lalit"
+            cuisine: "Indian",
+            servings: 2,
+            steps: "Boil tomatoes. Quick cool in ice bath. Blend tomatoes. Cook blended tomatoes and add seasoning and water.",
+            authour: "Lalit"
 
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
