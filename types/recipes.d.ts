@@ -1,4 +1,5 @@
 export interface Recipe {
+    id: any | string
     name: string
     cuisine: string
     servings: number
@@ -7,8 +8,8 @@ export interface Recipe {
     // Make each step '.' separated
     steps: string
     authour: string
-    created_at: string
-    updated_at: string
+    created_at: any | string
+    updated_at: string | string
 }
 
 export interface Ingredient {

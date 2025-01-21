@@ -11,7 +11,7 @@ export const createRecipe = async (req: Request, res: Response, next: NextFuncti
         if (!result) throw Error("Error occurred when creating a database")
 
         const createdRecipe = result.rows[0];
-        return res.json({ message: "Successfully created recipe!", recipe: createdRecipe });
+        return createdRecipe
     } catch (err) {
         next(err);
     }
