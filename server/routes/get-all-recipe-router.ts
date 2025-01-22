@@ -9,6 +9,6 @@ export const getAllRecipes = async (req: Request, res: Response, next: NextFunct
 
         return result.rows
     } catch (err) {
-        next(err);
+        throw err
     }
 };

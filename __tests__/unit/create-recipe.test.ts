@@ -44,6 +44,8 @@ describe("given recipe parameters", () => {
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         expect(response.body[0]).toEqual("Name of recipe is missing!")
+        expect(response.status).toEqual(422)
+
     })
 
     it(`should throw an error if an ingredient name is missing`, async () => {
@@ -62,6 +64,8 @@ describe("given recipe parameters", () => {
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         expect(response.body).toContain("Name of ingredient is missing!")
+        expect(response.status).toEqual(422)
+
     })
 
     it(`should throw an error if an ingredient quantity is missing`, async () => {
@@ -80,6 +84,8 @@ describe("given recipe parameters", () => {
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         expect(response.body[0]).toEqual(`Quantity of ingredient is missing!`)
+        expect(response.status).toEqual(422)
+
     })
 
     it(`should throw an error if type/cuisine of recipe is missing`, async () => {
@@ -98,6 +104,8 @@ describe("given recipe parameters", () => {
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         expect(response.body).toContain(`Recipe type/cuisine not been specified!`)
+        expect(response.status).toEqual(422)
+
     })
 
     it(`should throw an error if number of servings is missing`, async () => {
@@ -116,6 +124,8 @@ describe("given recipe parameters", () => {
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         expect(response.body).toContain(`Number of people the recipe or dish serves is missing!`)
+        expect(response.status).toEqual(422)
+
     })
 
     it(`should throw an error if steps are missing `, async () => {
@@ -135,6 +145,8 @@ describe("given recipe parameters", () => {
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         expect(response.body).toContain(`Steps are missing!`)
+        expect(response.status).toEqual(422)
+
     })
 
     it(`should throw an error if authour is missing `, async () => {
@@ -154,6 +166,28 @@ describe("given recipe parameters", () => {
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         expect(response.body).toContain(`Authour needs to be added!`)
+    })
+
+    it(`should throw an error if error occured when creating in database`, async () => {
+        pool.query.mockResolvedValue(null);
+        const response = await request(router).post("/api/recipes").send({
+            name: "Tomato Soup",
+            ingredients: [
+                {
+                    name: "Tomato",
+                    quantity: "100gm"
+                }
+            ],
+            cuisine: "Indian",
+            servings: 2,
+            steps: "Boil tomatoes. Quick cool in ice bath. Blend tomatoes. Cook blended tomatoes and add seasoning and water.",
+            authour: "Lalit"
+
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        console.log("response: ", response.body)
+        expect(response.body.message).toEqual("Internal Server Error")
+        expect(response.status).toEqual(500)
     })
 
     it(`should successfully create a recipe`, async () => {
@@ -187,6 +221,7 @@ describe("given recipe parameters", () => {
 
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
+        expect(response.status).toEqual(201)
         expect(response.body.message).toEqual(`Successfully created recipe!`)
         expect(response.body.recipe.authour).toEqual(`Lalit`)
         expect(response.body.recipe.cuisine).toEqual(`Indian`)

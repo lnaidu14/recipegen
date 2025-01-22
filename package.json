@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=prod npx ts-node server/app.ts",
     "dev": "cross-env NODE_ENV=dev nodemon --exec npx ts-node server/app.ts",
-    "test": "cross-env NODE_ENV=test jest __tests__/unit/* --no-cache --coverage",
+    "test": "cross-env NODE_ENV=test jest __tests__/unit/* --no-cache --coverage -- tests/get*",
     "test-watch": "cross-env NODE_ENV=test __tests__/unit/* --no-cache --watch-all"
   },
   "author": "Lalit Naidu",

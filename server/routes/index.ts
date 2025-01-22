@@ -13,16 +13,24 @@ router.post("/recipes", recipeValidator, async (req: any, res: any, next: expres
     const errors = validationResult(req)
     if (errors.isEmpty()) {
         // in case request params meet the validation criteria
-        const createdRecipe = await createRecipe(req, res, next)
-        return res.status(201).json({ message: "Successfully created recipe!", recipe: createdRecipe });
+        try {
+            const createdRecipe = await createRecipe(req, res, next)
+            return res.status(201).json({ message: "Successfully created recipe!", recipe: createdRecipe });
+        } catch (err) {
+            return res.status(500).json({ message: "Internal Server Error" })
+        }
 
     }
     return res.status(422).json(errors.array().map(error => error.msg))
 })
 
 router.get("/recipes", async (req: any, res: any, next: express.NextFunction) => {
-    const fetchedRecipes = await getAllRecipes(req, res, next)
-    return res.status(200).json({ message: "Successfully fetched recipes!", recipe: fetchedRecipes });
+    try {
+        const fetchedRecipes = await getAllRecipes(req, res, next)
+        return res.status(200).json({ message: "Successfully fetched recipes!", recipes: fetchedRecipes });
+    } catch (err) {
+        return res.status(500).json({ message: "Internal Server Error" })
+    }
 })
 
 export default router
